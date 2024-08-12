@@ -1,3 +1,7 @@
+--------------------------------------------------------------------------------
+--  Options
+--------------------------------------------------------------------------------
+
 -- Set <space> as the leader key
 -- See `:help mapleader`
 --  NOTE: Must happen before plugins are loaded (otherwise wrong leader will be used)
@@ -36,6 +40,8 @@ vim.opt.smartcase = true
 -- Keep signcolumn on by default
 vim.opt.signcolumn = 'yes'
 
+vim.opt.wrap = false -- don't wrap lines
+
 -- Decrease update time
 vim.opt.updatetime = 150
 
@@ -57,10 +63,17 @@ vim.opt.listchars = { tab = '» ', trail = '·', nbsp = '␣' }
 vim.opt.inccommand = 'split'
 
 -- Show which line your cursor is on
-vim.opt.cursorline = true
+-- vim.opt.cursorline = true
 
 -- Minimal number of screen lines to keep above and below the cursor.
-vim.opt.scrolloff = 8
+vim.opt.scrolloff = 7
+vim.opt.sidescrolloff = 7
+
+vim.opt.foldmethod = 'indent' -- fold based on indent
+vim.opt.foldlevel = 99 -- open all folds by default
+
+--vim.g.netrw_banner = 0 -- no banner
+vim.g.netrw_liststyle = 3 -- tree view
 
 -- [[ Basic Keymaps ]]
 --  See `:help vim.keymap.set()`
@@ -68,6 +81,21 @@ vim.opt.scrolloff = 8
 -- Set highlight on search, but clear on pressing <Esc> in normal mode
 vim.opt.hlsearch = true
 vim.keymap.set('n', '<Esc>', '<cmd>nohlsearch<CR>')
+
+--------------------------------------------------------------------------------
+--  General Keymaps
+--------------------------------------------------------------------------------
+
+vim.keymap.set('n', '<C-d>', '<C-d>zz')
+vim.keymap.set('n', '<C-u>', '<C-u>zz')
+
+-- save and quit
+vim.keymap.set('i', 'jj', '<Esc>')
+vim.keymap.set('i', 'kk', '<Esc>:w<CR>')
+
+--------------------------------------------------------------------------------
+--  Packages
+--------------------------------------------------------------------------------
 
 -- Diagnostic keymaps
 vim.keymap.set('n', '[d', vim.diagnostic.goto_prev, { desc = 'Go to previous [D]iagnostic message' })
@@ -153,6 +181,8 @@ require('lazy').setup({
   --    require('gitsigns').setup({ ... })
   --
   -- See `:help gitsigns` to understand what the configuration keys do
+  { 'tpope/vim-fugitive' },
+  { 'github/copilot.vim' },
   { -- Adds git related signs to the gutter, as well as utilities for managing changes
     'lewis6991/gitsigns.nvim',
     opts = {
@@ -188,13 +218,13 @@ require('lazy').setup({
       require('which-key').setup()
 
       -- Document existing key chains
-      require('which-key').register {
-        ['<leader>c'] = { name = '[C]ode', _ = 'which_key_ignore' },
-        ['<leader>d'] = { name = '[D]ocument', _ = 'which_key_ignore' },
-        ['<leader>r'] = { name = '[R]ename', _ = 'which_key_ignore' },
-        ['<leader>s'] = { name = '[S]earch', _ = 'which_key_ignore' },
-        ['<leader>w'] = { name = '[W]orkspace', _ = 'which_key_ignore' },
-      }
+      --require('which-key').register {
+      --  ['<leader>c'] = { name = '[C]ode', _ = 'which_key_ignore' },
+      --  ['<leader>d'] = { name = '[D]ocument', _ = 'which_key_ignore' },
+      --  ['<leader>r'] = { name = '[R]ename', _ = 'which_key_ignore' },
+      --  ['<leader>s'] = { name = '[S]earch', _ = 'which_key_ignore' },
+      --  ['<leader>w'] = { name = '[W]orkspace', _ = 'which_key_ignore' },
+      --}
     end,
   },
 
@@ -648,7 +678,7 @@ require('lazy').setup({
       -- Load the colorscheme here.
       -- Like many other themes, this one has different styles, and you could load
       -- any other, such as 'tokyonight-storm', 'tokyonight-moon', or 'tokyonight-day'.
-      vim.cmd.colorscheme 'tokyonight-night'
+      vim.cmd.colorscheme 'tokyonight'
 
       -- You can configure highlights by doing something like:
       vim.cmd.hi 'Comment gui=none'
@@ -745,27 +775,7 @@ require('lazy').setup({
   --  Uncomment the following line and add your plugins to `lua/custom/plugins/*.lua` to get going.
   --    For additional information, see `:help lazy.nvim-lazy.nvim-structuring-your-plugins`
   -- { import = 'custom.plugins' },
-}, {
-  ui = {
-    -- If you are using a Nerd Font: set icons to an empty table which will use the
-    -- default lazy.nvim defined Nerd Font icons, otherwise define a unicode icons table
-    icons = vim.g.have_nerd_font and {} or {
-      cmd = '⌘',
-      config = '🛠',
-      event = '📅',
-      ft = '📂',
-      init = '⚙',
-      keys = '🗝',
-      plugin = '🔌',
-      runtime = '💻',
-      require = '🌙',
-      source = '📄',
-      start = '🚀',
-      task = '📌',
-      lazy = '💤 ',
-    },
-  },
-})
+}, {})
 
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et
