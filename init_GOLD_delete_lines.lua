@@ -50,57 +50,6 @@ vim.opt.smartindent = true
 vim.cmd 'set path+=**' -- search for files in subdirectories
 vim.opt.syntax = 'ON'
 
---------------------------------------------------------------------------------
---  Packages Definition
---------------------------------------------------------------------------------
-
-local lazypath = vim.fn.stdpath 'data' .. '/lazy/lazy.nvim'
-if not vim.loop.fs_stat(lazypath) then
-  vim.fn.system {
-    'git',
-    'clone',
-    '--filter=blob:none',
-    'https://github.com/folke/lazy.nvim.git',
-    '--branch=stable', -- latest stable release
-    lazypath,
-  }
-end
-vim.opt.rtp:prepend(lazypath)
-
--- define plugins
-local plugins = {
-  { 'folke/tokyonight.nvim', lazy = false },
-  { 'tpope/vim-fugitive' },
-  {
-    'nvim-treesitter/nvim-treesitter',
-    build = ':TSUpdate',
-    config = function()
-      local configs = require 'nvim-treesitter.configs'
-      configs.setup {
-        ensure_installed = { 'lua', 'typescript', 'javascript', 'dart', 'html', 'css', 'python' },
-        highlight = { enable = true },
-        indent = { enable = true },
-      }
-    end,
-  },
-  { 'neovim/nvim-lspconfig' },
-  { 'hrsh7th/nvim-cmp' },
-  { 'hrsh7th/cmp-nvim-lsp' },
-  {
-    'L3MON4D3/LuaSnip',
-    dependencies = { 'rafamadriz/friendly-snippets' },
-  },
-  { 'github/copilot.vim' },
-  { 'nvim-telescope/telescope.nvim', tag = '0.1.6', dependencies = { 'nvim-lua/plenary.nvim' } },
-  { 'nvim-telescope/telescope-ui-select.nvim' },
-}
-
-require('lazy').setup(plugins, {})
-
---------------------------------------------------------------------------------
---  Packages Setup
---------------------------------------------------------------------------------
-
 -- Appearance
 --------------------
 
@@ -187,40 +136,6 @@ require('telescope').load_extension 'ui-select'
 vim.keymap.set('n', '<C-k>', '[`zz') -- go to previouse mark
 vim.keymap.set('n', '<C-j>', ']`zz') -- go to next mark
 
--- save and quit
-vim.keymap.set('n', '<leader>s', ':w<CR>') -- s for save
-vim.keymap.set('n', '<leader>a', ':bd<CR>') -- a for abort (quit) buffer
-vim.keymap.set('n', '<leader>q', ':q<CR>') -- q for quit
-vim.keymap.set('n', '<leader>w', ':wq<CR>') -- w for write and quit
-
--- file explorer
-vim.keymap.set('n', '<leader>t', ':Explore<CR>') -- t for tree
-
--- git
--- vim.keymap.set("n", "<leader>g", ":vertical Git<CR>:vertical resize 60<CR>") -- g for git
-vim.keymap.set('n', '<leader>g', ':Git<CR>') -- g for git
-vim.keymap.set('n', '<leader>d', vim.cmd.Gvdiffsplit) -- d for diff
-vim.keymap.set('n', '<leader>p', ':G push origin<CR>') -- p for push
-
--- lsp
-vim.keymap.set('n', 'ge', vim.diagnostic.goto_prev)
---vim.keymap.set('n', 'gä', vim.diagnostic.goto_next)
-
-vim.api.nvim_create_autocmd('LspAttach', {
-  group = vim.api.nvim_create_augroup('UserLspConfig', {}),
-  callback = function(ev)
-    vim.bo[ev.buf].omnifunc = 'v:lua.vim.lsp.omnifunc'
-
-    local opts = { buffer = ev.buf }
-    vim.keymap.set('n', 'K', vim.lsp.buf.hover, opts) -- hit K twice enters sub-window
-    vim.keymap.set('n', 'gd', vim.lsp.buf.definition, opts)
-    vim.keymap.set('n', 'gr', vim.lsp.buf.references, opts)
-    vim.keymap.set('n', 'gi', vim.lsp.buf.implementation, opts)
-    vim.keymap.set('n', '<leader>r', vim.lsp.buf.rename, opts) -- r for rename
-    vim.keymap.set('n', 'gD', vim.lsp.buf.declaration, opts)
-  end,
-})
-
 -- Statusline
 --------------------
 
@@ -240,22 +155,12 @@ vim.o.statusline = '%<' .. file_icon .. '%f %h%m%r%=%{v:lua.DiagnosticStatus()} 
 local builtin = require 'telescope.builtin'
 
 -- Diagnostics
-vim.keymap.set('n', '<leader>e', builtin.diagnostics, {}) -- e for errors
-vim.keymap.set('n', '<leader>ö', vim.diagnostic.goto_next, {}) -- ä for errors
 vim.keymap.set('n', '<leader>m', builtin.marks, {}) -- m for marks
 
 -- Code Actions
-vim.keymap.set('n', '<leader>c', function() -- c for code actions
-  vim.lsp.buf.code_action { border = 'rounded' }
-end)
 
 -- Files
-vim.keymap.set('n', '<leader>f', builtin.live_grep, {}) -- f for find
-vim.keymap.set('n', '<leader>o', builtin.find_files, {}) -- o for open
 vim.keymap.set('n', '<leader>i', builtin.git_files, {}) -- i for in git
-
--- Buffers
-vim.keymap.set('n', '<leader>b', builtin.buffers, {}) -- b for buffers
 
 -- Telescope UI
 local colors = require 'tokyonight.colors'
