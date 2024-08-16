@@ -16,6 +16,11 @@ vim.opt.breakindent = true
 
 vim.opt.undofile = true
 
+vim.opt.tabstop = 2
+vim.opt.expandtab = true
+vim.opt.shiftwidth = 2
+vim.opt.smartindent = true
+
 vim.opt.ignorecase = true
 vim.opt.smartcase = true
 
@@ -290,7 +295,7 @@ require('lazy').setup({
       local servers = {
         -- clangd = {},
         -- gopls = {},
-        -- pyright = {},
+        pyright = {},
         -- rust_analyzer = {},
         -- ... etc. See `:help lspconfig-all` for a list of all the pre-configured LSPs
         --
@@ -298,7 +303,7 @@ require('lazy').setup({
         --    https://github.com/pmizio/typescript-tools.nvim
         --
         -- But for many setups, the LSP (`tsserver`) will work just fine
-        -- tsserver = {},
+        tsserver = {},
         --
 
         lua_ls = {
@@ -555,6 +560,9 @@ require('lazy').setup({
     end,
   },
 }, {})
+
+local lspconfig = require 'lspconfig'
+lspconfig['dartls'].setup {}
 
 -- Statusline
 --------------------
