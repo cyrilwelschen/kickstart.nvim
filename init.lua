@@ -15,6 +15,7 @@ vim.opt.clipboard = 'unnamedplus'
 vim.opt.breakindent = true
 
 vim.opt.undofile = true
+vim.opt.cmdheight = 0
 
 vim.opt.tabstop = 2
 vim.opt.expandtab = true
@@ -69,6 +70,10 @@ vim.keymap.set('n', '<C-u>', '<C-u>zz')
 vim.keymap.set('i', 'jj', '<Esc>')
 vim.keymap.set('i', 'kk', '<Esc>:w<CR>')
 
+-- Buffer Navigation
+vim.keymap.set('n', '<C-h>', ':bprevious<CR>', {})
+vim.keymap.set('n', '<C-l>', ':bnext<CR>', {})
+
 -- save and quit
 vim.keymap.set('n', '<leader>s', ':w<CR>', { desc = '[S]ave' }) -- s for save
 vim.keymap.set('n', '<leader>a', ':bd<CR>', { desc = '[A]bort/Quit buffer' }) -- a for abort (quit) buffer
@@ -86,10 +91,10 @@ vim.keymap.set('n', '<leader>eq', vim.diagnostic.setloclist, { desc = 'Open diag
 
 -- Keybinds to make split navigation easier.
 --  See `:help wincmd` for a list of all window commands
-vim.keymap.set('n', '<C-h>', '<C-w><C-h>', { desc = 'Move focus to the left window' })
-vim.keymap.set('n', '<C-l>', '<C-w><C-l>', { desc = 'Move focus to the right window' })
-vim.keymap.set('n', '<C-j>', '<C-w><C-j>', { desc = 'Move focus to the lower window' })
-vim.keymap.set('n', '<C-k>', '<C-w><C-k>', { desc = 'Move focus to the upper window' })
+---- vim.keymap.set('n', '<C-h>', '<C-w><C-h>', { desc = 'Move focus to the left window' })
+---- vim.keymap.set('n', '<C-l>', '<C-w><C-l>', { desc = 'Move focus to the right window' })
+---- vim.keymap.set('n', '<C-j>', '<C-w><C-j>', { desc = 'Move focus to the lower window' })
+---- vim.keymap.set('n', '<C-k>', '<C-w><C-k>', { desc = 'Move focus to the upper window' })
 
 -- Highlight when yanking (copying) text
 vim.api.nvim_create_autocmd('TextYankPost', {
@@ -491,7 +496,7 @@ require('lazy').setup({
       vim.cmd.colorscheme 'tokyonight-moon'
     end,
   },
-
+  { 'akinsho/bufferline.nvim', version = '*', dependencies = 'nvim-tree/nvim-web-devicons' },
   { -- Collection of various small independent plugins/modules
     'echasnovski/mini.nvim',
     config = function()
@@ -563,6 +568,14 @@ require('lazy').setup({
 
 local lspconfig = require 'lspconfig'
 lspconfig['dartls'].setup {}
+
+vim.opt.termguicolors = true
+local bufferline = require 'bufferline'
+bufferline.setup {
+  options = {
+    style_preset = bufferline.style_preset.minimal,
+  },
+}
 
 -- Statusline
 --------------------
