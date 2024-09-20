@@ -26,7 +26,7 @@ vim.opt.ignorecase = true
 vim.opt.smartcase = true
 
 -- Keep signcolumn on by default
--- vim.opt.signcolumn = 'yes'
+vim.opt.signcolumn = 'yes'
 
 -- vim.opt.wrap = false -- don't wrap lines
 
@@ -81,7 +81,7 @@ vim.keymap.set('n', '<leader>q', ':q<CR>', { desc = '[Q]uit' }) -- q for quit
 vim.keymap.set('n', '<leader>w', ':wq<CR>', { desc = '[W]rite and quit' }) -- w for write and quit
 
 -- file explorer
-vim.keymap.set('n', '<leader>t', ':Explore<CR>', { desc = 'Open file [T]ree' }) -- t for tree
+vim.keymap.set('n', '<leader>t', ':Explore<CR><CR>', { desc = 'Open file [T]ree' }) -- t for tree
 
 -- Diagnostic keymaps
 vim.keymap.set('n', '<leader>ö', vim.diagnostic.goto_prev, { desc = 'Go to previous [D]iagnostic message' })
@@ -534,6 +534,17 @@ require('lazy').setup({
       --  Check out: https://github.com/echasnovski/mini.nvim
     end,
   },
+  {
+    'luckasRanarison/tailwind-tools.nvim',
+    name = 'tailwind-tools',
+    build = ':UpdateRemotePlugins',
+    dependencies = {
+      'nvim-treesitter/nvim-treesitter',
+      'nvim-telescope/telescope.nvim', -- optional
+      'neovim/nvim-lspconfig', -- optional
+    },
+    opts = {}, -- your configuration
+  },
   { -- Highlight, edit, and navigate code
     'nvim-treesitter/nvim-treesitter',
     build = ':TSUpdate',
@@ -569,11 +580,15 @@ require('lazy').setup({
 local lspconfig = require 'lspconfig'
 lspconfig['dartls'].setup {}
 
+require('tailwind-tools').setup {}
+
 vim.opt.termguicolors = true
 local bufferline = require 'bufferline'
 bufferline.setup {
   options = {
     style_preset = bufferline.style_preset.minimal,
+    indicator = { style = 'none' },
+    show_buffer_icons = false,
   },
 }
 
@@ -594,9 +609,9 @@ vim.o.statusline = '%<' .. file_icon .. '%f %h%m%r%=%{v:lua.DiagnosticStatus()} 
 --  Keymaps
 --------------------------------------------------------------------------------
 
-vim.keymap.set('n', '<leader>g', ':Git<CR>', { desc = '[G]it' }) -- g for git
+vim.keymap.set('n', '<leader>g', ':Git<CR><CR>', { desc = '[G]it' }) -- g for git
 vim.keymap.set('n', '<leader>d', vim.cmd.Gvdiffsplit, { desc = 'Git [D]ifference' }) -- d for diff
-vim.keymap.set('n', '<leader>p', ':G push origin<CR>', { desc = 'Git [P]ush Origin' }) -- p for push
+vim.keymap.set('n', '<leader>p', ':G push origin<CR><CR>', { desc = 'Git [P]ush Origin' }) -- p for push
 
 vim.cmd 'highlight LineNrAbove guifg=#3e8287'
 vim.cmd 'highlight LineNrBelow guifg=#3f83ab'
